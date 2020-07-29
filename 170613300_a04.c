@@ -41,14 +41,18 @@ int* allocation = malloc(sizeof(int) *num_customers* num_resources);
 
 int* need = malloc(sizeof(int) * num_curomers* num_resources); 
 
+intialize( allocation, numofcustomers, num_resources);
+
+intialize( need , numofcustomers, num_resources);
 
 
 
 
 
 
+int*  work =  malloc(sizeof(int)*num_resorces);
 
-
+int*  finish = malloc(sizeof(int)*num_resources);
 
 
 
@@ -69,4 +73,48 @@ int numofcustomers(char* fileName)//do not modify this method
 
 
 	return coustumer_count;
+}
+
+
+// intitalize  the arrays  2d 
+
+void  intialize( int* p,int n, int m ){
+
+for( int i=0; i < n ; i++){
+
+   for ( int j=0; j<m ; j++ ){
+
+        p[i][j] = 0;
+   }
+}
+
+return;
+}
+
+
+// populate max 
+
+void populatemax (char * fileName, int*max, int n, int m ){
+
+
+
+
+
+}
+
+
+//intialize the array 1d
+
+void 1d( int*p, int n){
+
+
+for(int i =0;i <n; i++){
+
+   p[i] = 0;
+
+}
+
+
+return;
+
 }
