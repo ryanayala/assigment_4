@@ -6,8 +6,9 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <semaphore.h>
-
  
+
+
 
 typedef struct thread //represents a single thread, you can add more members if required
 {
@@ -19,6 +20,7 @@ typedef struct thread //represents a single thread, you can add more members if 
         int* work;
         int* finish;
         int* allocation;
+        sem_t* lock;
 } Thread;
 
 
@@ -57,12 +59,11 @@ intialize( need , num_customers, num_resources);
 
 
 
-
 int*  work =  malloc(sizeof(int)*num_resorces);
 
 int*  finish = malloc(sizeof(int)*num_customers);
 
-pop_avail(argc,work, argv); // filled available
+pop_avail(argc,work, argv); // filled worl
 
 1d(finish, num_ customers); // filled finish
 
@@ -146,6 +147,45 @@ else if(strcmp(s,"RL")==0){
 
 
 else if(strcmp(s,"Run")==0){
+pthread_t* threads = malloc(sizeof(pthread_t)*num_customers);
+
+
+
+int n =0;
+
+sem_t step_two;
+sem_init(&step_two, 0, 1);
+
+
+while(n<num_customers)
+		{
+
+			Thread*  structure = malloc(sizeof(Thread));
+                          stucture->customer_num = n;
+  			  structure->available = available;
+                          structure->max = max;
+ 			  structure->need= need;
+			  structure->work = work;
+			 structure->finish = finish; 
+			  structure->allocation = allocation;
+			structure->lock =&step_two; 
+			 pthread_create(&threads[n],NULL,threadRun,(void*) structure );
+   			n++;
+	}
+
+
+
+pop_avail(argc,work, argv); // filled work
+
+1d(finish, num_ customers); // filled finish with 0 
+
+
+
+
+
+
+
+
 
 
 }
@@ -307,14 +347,25 @@ return;
 }
 
 
+void* threadRun(void* t){     //implement this function i/n a suitable way
 
 
+Thread* p = (Thread*) t;
 
 
+while(true){
 
+	sem_wait(p->lock);
 
+       if(p->finish[p->customer_num]){
+
+	break;
+	}
 
 
 
 }
 
+
+
+}
