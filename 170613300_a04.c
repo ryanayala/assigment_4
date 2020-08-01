@@ -6,7 +6,18 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <semaphore.h>
+int numofcustomers(char* fileName);
  
+void  intialize( int* p,int n, int m );
+
+void populatemax (char * fileName, int*max, int n, int m );
+
+void 1d( int*p, int n);
+
+void pop_avail(int argc, int* available, char* argv);
+
+void print1D(int* p, int n, char* des);
+
 
 
 
@@ -44,7 +55,7 @@ pop_avail(argc,available, argv);
 
 
 
-int num_customers = numofcustormers( argc[1]); 
+int num_customers = numofcustormers(argv[1]); 
 
 
 
@@ -59,7 +70,7 @@ int* need = malloc(sizeof(int) * num_customers * num_resources);
 
 intialize( allocation, num_customers, num_resources);
 
-intialize( need , num_customers, num_resources);
+pop_need(need,num_customers,num_resources);
 
 
 int* safe = malloc(sizeof(int)* num_customers);
@@ -136,8 +147,65 @@ print2D(need, num_customers, num_resources, "Need");
 
 
 else if (strcmp(s,"RQ")==0){
+int row_num = atoi(argv[2]);
+
+int val= 1;
 
 
+for(int i = 0; i<num_resources;i++){
+
+  if(need[row_num][i] > atoi[argv[3+i]){
+	printf("Request exceeds maximum claim");
+	val = 0;
+        break;
+	} 
+
+}
+
+if(val){
+
+for(int o =0;o<num_resources;o++){
+
+	if(available[o] < atoi(argv[3+o]){
+	printf("Resources are not available Must wait");
+	val = 0;
+	break;
+	}
+
+
+
+}
+
+
+if(val){
+
+
+int*
+
+for(int e =0; e<num_resources;e++{
+	available[e]= available[e] - atoi(agrv[3+e]);
+	allocation[row_num][e] = allocation[row_num][e] + atoi(agrv[3+e]);
+	need[row_num][e] = need[row_num][e] + atoi(agrv[3+e]);
+
+}
+
+
+
+int is_safe = safeAlgo();
+
+if(!is_safe){
+	printf("Request is not satisfied");
+	for(int e =0; e<num_resources;e++{
+        	available[e]= available[e] + atoi(agrv[3+e]);
+        	allocation[row_num][e] = allocation[row_num][e] - atoi(agrv[3+e]);
+        	need[row_num][e] = need[row_num][e] - atoi(agrv[3+e]);
+	}
+
+}
+
+else{
+	printf("Request is satisfied");
+}
 
 
 
@@ -146,12 +214,37 @@ else if (strcmp(s,"RQ")==0){
 
 else if(strcmp(s,"RL")==0){
 
+int user_num  =atoi(argv[2])
 
+int valid =1;
+for(int h =0;h<num_resources;h++){
+	
+	if(3+h=> argc ||  atoi(agrv[3+h])<0){
+		printf("Error invalid request);
+		valid=0;
+		break;
+	}
 
+	if( allocation[user_num][i] - atoi(agrv[3+h]) <0){
 
+		printf("Error invalid request);
+                valid=0;
+                break;
+	}
 
 }
 
+if(valid){
+
+	for(int i=0; i<num_resources;i++{
+
+		  available[i]= available[i] + atoi(agrv[3+i]);
+          	allocation[user_num][i] = allocation[user_num][i] - atoi(agrv[3+i]);
+          	need[user_num][i] = need[user_num][i] - atoi(agrv[3+i]);
+
+
+	}
+}
 
 else if(strcmp(s,"Run")==0){
 pthread_t* threads = malloc(sizeof(pthread_t)*num_customers);
@@ -489,5 +582,72 @@ if(safe_size = strut->num_customers){
 }
 
 return 0;
+
+}
+
+
+void pop_need(int* need, int*max,int n,int m ){
+
+
+for(int i =0; i<n ;i++){//num_customers 
+
+	for(int j =0; j<m; j++){ // num_resources 
+
+	need[[i][j] = max[i][j]; 
+
+	}
+
+
+}
+
+return; 
+
+
+}
+
+int safeAlgo(int* work, int*finish, int*available, int *need , int num_customers, int num_ resources){
+
+	for(int i = 0; i<num_resources; i++{
+
+		work[i] = available[i];
+
+	}
+
+	1d(finish, num_ customers); // filled finish
+
+	while(true){
+
+		for(int p = 0; p<num_customers;p++{
+
+			if(!finish[p]){
+
+				for(int k =0; k<num_resources; k++){
+
+
+					if(need[p][k]  > work[k]){
+	
+						for(int f =0; f<num_customers; f++){
+
+								if(!finish[f]){
+								return 0;
+						
+								}
+'					
+							}		
+							return 1;
+					}
+
+				}
+			}
+
+
+
+	}
+
+
+
+
+
+
 
 }
