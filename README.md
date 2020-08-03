@@ -63,6 +63,38 @@ a.c:246:32: warning: passing argument 1 of ‘safeSq’ from incompatible pointe
 a.c:20:5: note: expected ‘int *’ but argument is of type ‘Thread * {aka struct thread *}’
 
 
+osc@ubuntu:~/Assignment_4$ ./a.out 10 5 7 8 
+Number of Customers: 5 
+Currently Available resources: 10 5 7 8
+Maximum resources from file:
+6,4,7,3
+4,2,3,2
+2,5,3,3
+6,3,3,2
+5,6,7,5
+Enter Command : *
+Available:	10 5 7 8 
+Max:
+6,4,7,3
+4,2,3,2
+2,5,3,3
+6,3,3,2
+5,6,7,5
+Allocation:
+0,0,0,0
+0,0,0,0
+0,0,0,0
+0,0,0,0
+0,0,0,0
+Need:
+6,4,7,3
+4,2,3,2
+2,5,3,3
+6,3,3,2
+5,6,7,5
+
+
+
 
 # Authors: Ryan Ayala
 
