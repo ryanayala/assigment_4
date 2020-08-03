@@ -8,6 +8,9 @@
 #include <semaphore.h>
 #include <stdbool.h>
 
+////Ryan ayala
+//git usernane:ryanayala
+// git url:https://github.com/ryanayala/assigment_4
 int numofcustomers(char* fileName);
 void  intialize( int* p,int n, int m );
 void populatemax (char* fileName, int* max, int n, int m );
@@ -49,12 +52,15 @@ int main(int argc,char* argv[])
     pop_avail(argc,available, argv);
 
     int num_customers = numofcustomers("sample4_in.txt");
+	if(num_customers == -1){
+		return ;
+	}
 
-    int* max =  (int *)malloc( sizeof(int)*num_customers* num_resources);
+    int* max = (int *)malloc( sizeof(int)*num_customers* num_resources);
 
 	populatemax("sample4_in.txt", max, num_customers, num_resources);
 
-    int* allocation = (int *)malloc(sizeof(int) *num_customers* num_resources);
+    int* allocation = malloc(sizeof(int) *num_customers* num_resources); 
 
     int* need = (int *)malloc(sizeof(int) * num_customers * num_resources);
 
@@ -103,6 +109,8 @@ int main(int argc,char* argv[])
     Thread* threads = NULL;
 
     char  s[1025];
+
+   while(1){
     printf("Enter Command : ");
 
     scanf("%s", s);
@@ -130,7 +138,7 @@ int main(int argc,char* argv[])
         for(int i = 0; i<num_resources; i++)
         {
 
-			if(*(need+  row_num*num_resources +i) > atoi(argv[3+i])){
+			if(*(need+ ( row_num*num_resources +i)*sizeof(int)) > atoi(argv[3+i])){
 
 				printf("Request exceeds maximum claim");
                 val = 0;
@@ -156,8 +164,8 @@ int main(int argc,char* argv[])
 				for(int e =0; e < num_resources;e++)
 				{
 					available[e]= available[e] - atoi(argv[3+e]);
-                    *(allocation+ row_num*num_resources+ e)= *(allocation+ row_num*num_resources+ e) + atoi(argv[3+e]); //allocation[row_num][e]
-                    *(need + row_num*num_resources +e) = *(need + row_num*num_resources +e) + atoi(argv[3+e]);   //need[row_num][e]
+                    *(allocation+ (row_num*num_resources+ e)*sizeof(int))= *(allocation+ (row_num*num_resources+ e)*sizeof(int)) + atoi(argv[3+e]); //allocation[row_num][e]
+                    *(need + (row_num*num_resources +e)*sizeof(int)) = *(need + (row_num*num_resources+e)*sizeof(int)) + atoi(argv[3+e]);   //need[row_num][e]
 
                 }
 
@@ -169,8 +177,8 @@ int main(int argc,char* argv[])
                     printf("Request is not satisfied");
 						for (int e = 0; e < num_resources;e++) {
 							available[e] = available[e]+ atoi(argv[3 + e]);
-                            *(allocation+ row_num*num_resources+ e) = *(allocation+ row_num*num_resources+ e) - atoi(argv[3+e]); // allocation[row_num][e]
-                            *(need + row_num*num_resources +e) =  *(need + row_num*num_resources +e) - atoi(argv[3+e]); //need[row_num][e]
+                            *(allocation+ (row_num*num_resources+ e)*sizeof(int)) = *(allocation+ (row_num*num_resources+ e)*sizeof(int)) - atoi(argv[3+e]); // allocation[row_num][e]
+                            *(need + (row_num*num_resources +e)*sizeof(int)) =  *(need + (row_num*num_resources +e)*sizeof(int)) - atoi(argv[3+e]); //need[row_num][e]
                     }
 
                 }
@@ -287,36 +295,47 @@ int main(int argc,char* argv[])
 
         }
 	}
-}
+	else if(strcmp(s,"quit")==0){
+		break;
+	}
 
+   }
+}
 
 // reads the numer of rows
 int numofcustomers(char* fileName)//do not modify this method
 {
     FILE *in = fopen(fileName, "r");
 
-    int coustumer_count = 0;
+    int costumer_count = 0;
 
-    char c;
     if(!in)
     {
         printf("could not open file");
         return -1;
     }
 
-    for (c =getc(in); c!= EOF ; c=getc(in))
-    {
+    char line[100];
 
-        if(c== '\n')
-        {
-            coustumer_count = coustumer_count + 1;
-        }
+    while(1){
+
+	char* ca =  fgets(line,100,in);
+	if(ca == NULL){
+		break;
+	}
+	while(line[strlen(line)-1]== ' '|| line[strlen(line)-1] =='\n' || line[strlen(line)-1] == '\r'){
+		line[strlen(line)-1] = '\0';
+
+	}
+	if(strlen(line) >0){
+		costumer_count++;
+	}
 
     }
 
     fclose(in);
 
-    return coustumer_count;
+    return costumer_count;
 }
 
 
@@ -350,36 +369,33 @@ void populatemax (char * fileName, int*max, int n, int m )
     if(!in)
     {
         printf("could not open file");
+		return ;
     }
 
-    char* lines[n];
+    char lines[100];
+	
     for(int k=0; k<n; k++)
 	{
+		fgets(lines,100,in);
 	    char* token = NULL;
 		int j = 0;
-		token =  strtok(lines[k],";");
+		token = strtok(lines,",");
             while(token!=NULL)
             {
-
-
-                for( int i =0; i<n ; i++)
-                {
-
+                
                     for( int j =0; j<m; j++ )
                     {
-
-                        *(max + i*m + j)= atoi(token); //max[i][j]
+                        
+                        *(max + k*m + j) = atoi(token); //max[i][j]
                         token =  strtok(NULL,",");
 
                     }
 
-                }
         
             }
     }
     fclose(in);
-    return;
-
+    return; 
 }
 
 //intialize the array 1d
@@ -452,9 +468,9 @@ void print2D(int *p, int n, int m, char*des)
 
 
         }
+	printf("\n");
     }
 
-    printf("\n");
 
     return;
 }
@@ -488,13 +504,16 @@ void* threadRun(void* t)      //implement this function i/n a suitable way
 
     printf(" Thread has started");
 // work to  no deallolcation
-
+		
+	//for(int z =0; z<p->num_resources;z++){
+	//	*(p->need+ p->safe_index*p->num_resources +z) -
+	//}
 
     printf("Thread is finished\n");
     printf("Thread  is relasing resources\n");
 
 //dealocate
-    print1D(p->available[p->customer_num],p->num_resources,"New Available");
+    print1D(&p->available[p->customer_num],p->num_resources,"New Available");
     sem_post(p->lock);
 
 
@@ -620,3 +639,4 @@ int safeAlgo(int* work, int*finish, int*available, int *need, int num_customers,
     }
 
 }
+
